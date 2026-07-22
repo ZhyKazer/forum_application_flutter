@@ -1,4 +1,4 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+﻿import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthenticationService {
   final SupabaseClient _supabase = Supabase.instance.client;
@@ -12,11 +12,18 @@ class AuthenticationService {
   Future<AuthResponse> register({
     required String email,
     required String password,
+    String? username,
   }) async {
+    final trimmedUsername = username?.trim();
+    final resolvedUsername = trimmedUsername == null || trimmedUsername.isEmpty
+        ? _generateUsername(email)
+        : trimmedUsername;
+
     try {
       return await _supabase.auth.signUp(
         email: email,
         password: password,
+        data: {'username': resolvedUsername},
       );
     } on AuthException catch (error) {
       throw Exception(error.message);
@@ -47,5 +54,17 @@ class AuthenticationService {
     } on AuthException catch (error) {
       throw Exception(error.message);
     }
+  }
+
+  String _generateUsername(String email) {
+    final emailName = email.split('@').first.toLowerCase();
+    final sanitizedName = emailName.replaceAll(RegExp(r'[^a-z0-9_]'), '');
+    final baseName = sanitizedName.isEmpty ? 'user' : sanitizedName;
+    final shortenedName = baseName.length > 16
+        ? baseName.substring(0, 16)
+        : baseName;
+    final uniqueSuffix = DateTime.now().microsecondsSinceEpoch.toRadixString(36);
+
+    return '${shortenedName}_$uniqueSuffix';
   }
 }
