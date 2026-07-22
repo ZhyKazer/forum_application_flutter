@@ -57,9 +57,6 @@ class CommentService {
   }
 
   Future<void> deleteComment(String commentId) async {
-    await _supabase
-        .from('comments')
-        .delete()
-        .eq('comment_id', commentId);
+    await _supabase.from('comments').delete().eq('comment_id', commentId);
   }
 }

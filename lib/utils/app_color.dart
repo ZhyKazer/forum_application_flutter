@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 /// Cyberpunk-inspired colors used throughout the app.
 ///
@@ -32,7 +32,7 @@ abstract final class AppColor {
   static const Color lightOnSurfaceVariant = Color(0xFF3F4A3F);
   static const Color lightOutline = Color(0xFF5C735D);
   static const Color lightOutlineVariant = Color(0xFFBCCBBC);
-  static const Color lightError = Color(0xFFBA1A1A);
+  static const Color lightError = Color.fromARGB(255, 255, 0, 0);
   static const Color lightOnError = Colors.white;
 
   // Dark theme values. Each name matches a ColorScheme property.
@@ -55,58 +55,60 @@ abstract final class AppColor {
   static const Color darkOnSurfaceVariant = Color(0xFFBACABA);
   static const Color darkOutline = Color(0xFF668568);
   static const Color darkOutlineVariant = Color(0xFF3C4A3D);
-  static const Color darkError = Color(0xFFFFB4AB);
-  static const Color darkOnError = Color(0xFF690005);
+  static const Color darkError = Color.fromARGB(255, 255, 0, 0);
+  static const Color darkOnError = Colors.white;
 
-  static final ColorScheme lightColorScheme = ColorScheme.fromSeed(
-    seedColor: neonGreen,
-    brightness: Brightness.light,
-  ).copyWith(
-    primary: lightPrimary,
-    onPrimary: lightOnPrimary,
-    primaryContainer: lightPrimaryContainer,
-    onPrimaryContainer: lightOnPrimaryContainer,
-    secondary: lightSecondary,
-    onSecondary: lightOnSecondary,
-    secondaryContainer: lightSecondaryContainer,
-    onSecondaryContainer: lightOnSecondaryContainer,
-    tertiary: lightTertiary,
-    onTertiary: lightOnTertiary,
-    tertiaryContainer: lightTertiaryContainer,
-    onTertiaryContainer: lightOnTertiaryContainer,
-    surface: lightSurface,
-    onSurface: lightOnSurface,
-    surfaceContainer: lightSurfaceContainer,
-    onSurfaceVariant: lightOnSurfaceVariant,
-    outline: lightOutline,
-    outlineVariant: lightOutlineVariant,
-    error: lightError,
-    onError: lightOnError,
-  );
+  static final ColorScheme lightColorScheme =
+      ColorScheme.fromSeed(
+        seedColor: neonGreen,
+        brightness: Brightness.light,
+      ).copyWith(
+        primary: lightPrimary,
+        onPrimary: lightOnPrimary,
+        primaryContainer: lightPrimaryContainer,
+        onPrimaryContainer: lightOnPrimaryContainer,
+        secondary: lightSecondary,
+        onSecondary: lightOnSecondary,
+        secondaryContainer: lightSecondaryContainer,
+        onSecondaryContainer: lightOnSecondaryContainer,
+        tertiary: lightTertiary,
+        onTertiary: lightOnTertiary,
+        tertiaryContainer: lightTertiaryContainer,
+        onTertiaryContainer: lightOnTertiaryContainer,
+        surface: lightSurface,
+        onSurface: lightOnSurface,
+        surfaceContainer: lightSurfaceContainer,
+        onSurfaceVariant: lightOnSurfaceVariant,
+        outline: lightOutline,
+        outlineVariant: lightOutlineVariant,
+        error: lightError,
+        onError: lightOnError,
+      );
 
-  static final ColorScheme darkColorScheme = ColorScheme.fromSeed(
-    seedColor: neonGreen,
-    brightness: Brightness.dark,
-  ).copyWith(
-    primary: darkPrimary,
-    onPrimary: darkOnPrimary,
-    primaryContainer: darkPrimaryContainer,
-    onPrimaryContainer: darkOnPrimaryContainer,
-    secondary: darkSecondary,
-    onSecondary: darkOnSecondary,
-    secondaryContainer: darkSecondaryContainer,
-    onSecondaryContainer: darkOnSecondaryContainer,
-    tertiary: darkTertiary,
-    onTertiary: darkOnTertiary,
-    tertiaryContainer: darkTertiaryContainer,
-    onTertiaryContainer: darkOnTertiaryContainer,
-    surface: darkSurface,
-    onSurface: darkOnSurface,
-    surfaceContainer: darkSurfaceContainer,
-    onSurfaceVariant: darkOnSurfaceVariant,
-    outline: darkOutline,
-    outlineVariant: darkOutlineVariant,
-    error: darkError,
-    onError: darkOnError,
-  );
+  static final ColorScheme darkColorScheme =
+      ColorScheme.fromSeed(
+        seedColor: neonGreen,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: darkPrimary,
+        onPrimary: darkOnPrimary,
+        primaryContainer: darkPrimaryContainer,
+        onPrimaryContainer: darkOnPrimaryContainer,
+        secondary: darkSecondary,
+        onSecondary: darkOnSecondary,
+        secondaryContainer: darkSecondaryContainer,
+        onSecondaryContainer: darkOnSecondaryContainer,
+        tertiary: darkTertiary,
+        onTertiary: darkOnTertiary,
+        tertiaryContainer: darkTertiaryContainer,
+        onTertiaryContainer: darkOnTertiaryContainer,
+        surface: darkSurface,
+        onSurface: darkOnSurface,
+        surfaceContainer: darkSurfaceContainer,
+        onSurfaceVariant: darkOnSurfaceVariant,
+        outline: darkOutline,
+        outlineVariant: darkOutlineVariant,
+        error: darkError,
+        onError: darkOnError,
+      );
 }

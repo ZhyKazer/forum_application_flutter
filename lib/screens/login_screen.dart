@@ -1,5 +1,4 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:forum_application_flutter/screens/home_screen.dart';
 import 'package:forum_application_flutter/screens/registration_screen.dart';
 import 'package:forum_application_flutter/services/authentication_services.dart';
 import 'package:forum_application_flutter/utils/grid_background.dart';
@@ -41,15 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _authenticationService.login(email: email, password: password);
-
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString().replaceFirst('Exception: ', ''))),
+        SnackBar(
+          content: Text(error.toString().replaceFirst('Exception: ', '')),
+        ),
       );
     } finally {
       if (mounted) {
@@ -221,4 +217,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
 

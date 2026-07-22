@@ -1,4 +1,4 @@
-﻿import 'profile_models.dart';
+import 'profile_models.dart';
 
 class PostModel {
   final String postId;
@@ -10,13 +10,14 @@ class PostModel {
   final ProfileModel? author;
 
   PostModel({
-    required this.postId, 
-    required this.authorId, 
-    required this.title, 
-    required this.content, 
-    required this.createdAt, 
-    required this.updatedAt, 
-    this.author});
+    required this.postId,
+    required this.authorId,
+    required this.title,
+    required this.content,
+    required this.createdAt,
+    required this.updatedAt,
+    this.author,
+  });
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
     postId: json['post_id'] as String,
@@ -25,14 +26,17 @@ class PostModel {
     content: json['post_content'] as String,
     createdAt: DateTime.parse(json['created_at'] as String),
     updatedAt: DateTime.parse(json['updated_at'] as String),
-    author: json['profiles'] != null ? ProfileModel.fromJson(json['profiles'] as Map<String, dynamic>) : null,
+    author: json['profiles'] != null
+        ? ProfileModel.fromJson(json['profiles'] as Map<String, dynamic>)
+        : null,
   );
 
   Map<String, dynamic> toJson() => {
-    'post_id': postId, 
-    'author_id': authorId, 
-    'post_title': title, 
-    'post_content': content, 
-    'created_at': createdAt.toIso8601String(), 
-    'updated_at': updatedAt.toIso8601String()};
+    'post_id': postId,
+    'author_id': authorId,
+    'post_title': title,
+    'post_content': content,
+    'created_at': createdAt.toIso8601String(),
+    'updated_at': updatedAt.toIso8601String(),
+  };
 }

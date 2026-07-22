@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:forum_application_flutter/screens/login_screen.dart';
-import 'package:forum_application_flutter/screens/registration_screen.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:forum_application_flutter/screens/home_screen.dart';
+import 'package:forum_application_flutter/screens/login_screen.dart';
+import 'package:forum_application_flutter/screens/profile_page.dart';
 import 'package:forum_application_flutter/utils/app_color.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const supabaseKey = String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY');
@@ -31,7 +31,29 @@ class MainApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColor.darkBackground,
       ),
       themeMode: ThemeMode.dark,
-      home: HomeScreen(),
+      // home: ProfileScreen(),
+      home: const _AuthGate(),
+    );
+  }
+}
+
+class _AuthGate extends StatelessWidget {
+  const _AuthGate();
+
+  @override
+  Widget build(BuildContext context) {
+    final auth = Supabase.instance.client.auth;
+
+    return StreamBuilder<AuthState>(
+      stream: auth.onAuthStateChange,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+
+        final session = snapshot.data?.session ?? auth.currentSession;
+        return session == null ? const LoginScreen() : const HomeScreen();
+      },
     );
   }
 }

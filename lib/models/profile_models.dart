@@ -1,4 +1,4 @@
-﻿class ProfileModel {
+class ProfileModel {
   final String userId;
   final String? avatarPath;
   final String username;
@@ -6,12 +6,12 @@
   final DateTime updatedAt;
 
   ProfileModel({
-    required this.userId, 
-    this.avatarPath, 
-    required this.username, 
-    required this.createdAt, 
-    required this.updatedAt
-    });
+    required this.userId,
+    this.avatarPath,
+    required this.username,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
     userId: json['user_id'] as String,
@@ -22,10 +22,10 @@
   );
 
   Map<String, dynamic> toJson() => {
-    'user_id': userId, 
-    'avatar_path': avatarPath, 
-    'username': username, 
-    'created_at': createdAt.toIso8601String(), 
-    'updated_at': updatedAt.toIso8601String()
-    };
+    'user_id': userId,
+    'avatar_path': avatarPath,
+    'username': username,
+    'created_at': createdAt.toIso8601String(),
+    'updated_at': updatedAt.toIso8601String(),
+  };
 }

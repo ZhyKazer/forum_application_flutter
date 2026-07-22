@@ -4,20 +4,27 @@ import '../models/post_models.dart';
 class PostService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<List<PostModel>> getPosts() async {
-    final data = await _supabase
-        .from('posts')
-        .select('*, profiles(*)')
-        .order('created_at', ascending: false);
+  /// Fetches one page of posts. The range end is inclusive.
+  Future<List<PostModel>> getPosts({int offset = 0, int limit = 10}) async {
+    if (offset < 0 || limit < 1) {
+      throw ArgumentError(
+        'offset must be positive and limit must be at least 1.',
+      );
+    }
 
-    return data
-        .map<PostModel>((json) => PostModel.fromJson(json))
-        .toList();
+    final data = await _supabase
+        .from('post')
+        .select('*, profiles(*)')
+        .order('created_at', ascending: false)
+        .order('post_id', ascending: false)
+        .range(offset, offset + limit - 1);
+
+    return data.map<PostModel>((json) => PostModel.fromJson(json)).toList();
   }
 
   Future<PostModel> getPostById(String postId) async {
     final data = await _supabase
-        .from('posts')
+        .from('post')
         .select('*, profiles(*)')
         .eq('post_id', postId)
         .single();
@@ -36,7 +43,7 @@ class PostService {
     }
 
     final data = await _supabase
-        .from('posts')
+        .from('post')
         .insert({
           'author_id': user.id,
           'post_title': title,
@@ -54,7 +61,7 @@ class PostService {
     required String content,
   }) async {
     final data = await _supabase
-        .from('posts')
+        .from('post')
         .update({
           'post_title': title,
           'post_content': content,
@@ -68,9 +75,6 @@ class PostService {
   }
 
   Future<void> deletePost(String postId) async {
-    await _supabase
-        .from('posts')
-        .delete()
-        .eq('post_id', postId);
+    await _supabase.from('post').delete().eq('post_id', postId);
   }
 }

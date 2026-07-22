@@ -1,4 +1,4 @@
-﻿import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthenticationService {
   final SupabaseClient _supabase = Supabase.instance.client;
@@ -63,7 +63,9 @@ class AuthenticationService {
     final shortenedName = baseName.length > 16
         ? baseName.substring(0, 16)
         : baseName;
-    final uniqueSuffix = DateTime.now().microsecondsSinceEpoch.toRadixString(36);
+    final uniqueSuffix = DateTime.now().microsecondsSinceEpoch.toRadixString(
+      36,
+    );
 
     return '${shortenedName}_$uniqueSuffix';
   }

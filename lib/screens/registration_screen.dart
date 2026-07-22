@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:forum_application_flutter/services/authentication_services.dart';
 import 'package:forum_application_flutter/utils/grid_background.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,14 +48,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registration successful.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Registration successful.')));
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.toString())));
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -105,7 +105,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         cursorColor: colors.primary,
                         style: GoogleFonts.jetBrainsMono(
                           color: colors.onSurface,
-                          fontWeight: FontWeight.w100
+                          fontWeight: FontWeight.w100,
                         ),
                         decoration: _inputDecoration(
                           colors: colors,
@@ -129,7 +129,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         cursorColor: colors.primary,
                         style: GoogleFonts.jetBrainsMono(
                           color: colors.onSurface,
-                          fontWeight: FontWeight.w100
+                          fontWeight: FontWeight.w100,
                         ),
                         decoration: _inputDecoration(
                           colors: colors,
@@ -157,7 +157,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         cursorColor: colors.primary,
                         style: GoogleFonts.jetBrainsMono(
                           color: colors.onSurface,
-                          fontWeight: FontWeight.w100
+                          fontWeight: FontWeight.w100,
                         ),
                         decoration: _inputDecoration(
                           colors: colors,

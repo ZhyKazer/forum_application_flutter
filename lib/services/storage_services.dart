@@ -13,26 +13,16 @@ class StorageService {
 
     await _supabase.storage
         .from('avatars')
-        .upload(
-          filePath,
-          file,
-          fileOptions: const FileOptions(
-            upsert: true,
-          ),
-        );
+        .upload(filePath, file, fileOptions: const FileOptions(upsert: true));
 
     return filePath;
   }
 
   String getAvatarUrl(String storagePath) {
-    return _supabase.storage
-        .from('avatars')
-        .getPublicUrl(storagePath);
+    return _supabase.storage.from('avatars').getPublicUrl(storagePath);
   }
 
   Future<void> deleteAvatar(String storagePath) async {
-    await _supabase.storage
-        .from('avatars')
-        .remove([storagePath]);
+    await _supabase.storage.from('avatars').remove([storagePath]);
   }
 }

@@ -1,75 +1,15 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:forum_application_flutter/services/authentication_services.dart';
 import 'package:forum_application_flutter/utils/grid_background.dart';
+import 'package:forum_application_flutter/widgets/post_builder_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  static const List<_PlaceholderPost> _placeholderPosts = [
-    _PlaceholderPost(
-      author: 'neon_kazer',
-      title: 'Welcome to the grid',
-      content:
-          'This is a placeholder post. Your fetched Supabase posts will appear here later.',
-      imageCount: 1,
-    ),
-    _PlaceholderPost(
-      author: 'pixel_runner',
-      title: 'Late-night build session',
-      content:
-          'Working on the next feature under green terminal lights. The interface is starting to come alive.',
-      imageCount: 0,
-    ),
-    _PlaceholderPost(
-      author: 'cyber_ghost',
-      title: 'Interface concept',
-      content:
-          'A clean feed card should keep the author, title, content, image, and actions easy to scan.',
-      imageCount: 2,
-    ),
-    _PlaceholderPost(
-      author: 'neon_kazer',
-      title: 'Welcome to the grid',
-      content:
-          'This is a placeholder post. Your fetched Supabase posts will appear here later.',
-      imageCount: 1,
-    ),
-    _PlaceholderPost(
-      author: 'pixel_runner',
-      title: 'Late-night build session',
-      content:
-          'Working on the next feature under green terminal lights. The interface is starting to come alive.',
-      imageCount: 0,
-    ),
-    _PlaceholderPost(
-      author: 'cyber_ghost',
-      title: 'Interface concept',
-      content:
-          'A clean feed card should keep the author, title, content, image, and actions easy to scan.',
-      imageCount: 2,
-    ),
-    _PlaceholderPost(
-      author: 'neon_kazer',
-      title: 'Welcome to the grid',
-      content:
-          'This is a placeholder post. Your fetched Supabase posts will appear here later.',
-      imageCount: 1,
-    ),
-    _PlaceholderPost(
-      author: 'pixel_runner',
-      title: 'Late-night build session',
-      content:
-          'Working on the next feature under green terminal lights. The interface is starting to come alive.',
-      imageCount: 0,
-    ),
-    _PlaceholderPost(
-      author: 'cyber_ghost',
-      title: 'Interface concept',
-      content:
-          'A clean feed card should keep the author, title, content, image, and actions easy to scan.',
-      imageCount: 2,
-    ),
-  ];
+  Future<void> logout() async {
+    await AuthenticationService().logout();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,13 +38,7 @@ class HomeScreen extends StatelessWidget {
                       child: _buildProfile(context),
                     ),
                     const SizedBox(width: gap),
-                    SizedBox(
-                      width: feedWidth,
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: _buildPostScrollable(context),
-                      ),
-                    ),
+                    SizedBox(width: feedWidth, child: const PostBuilder()),
                     const SizedBox(width: gap),
                     SizedBox(
                       width: sidePanelWidth,
@@ -122,7 +56,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildProfile(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
@@ -186,9 +119,8 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 18),
                 OutlinedButton.icon(
                   onPressed: () {},
-                  icon: const Icon(Icons.edit_outlined, size: 16),
                   label: Text(
-                    'EDIT',
+                    'PROFILE',
                     style: GoogleFonts.jetBrainsMono(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
@@ -196,6 +128,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   style: ButtonStyle(
+                    minimumSize: WidgetStateProperty.all(const Size(110, 40)),
                     shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                     ),
@@ -214,6 +147,39 @@ class HomeScreen extends StatelessWidget {
                     }),
                   ),
                 ),
+                SizedBox(height: 10),
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    await logout();
+                  },
+                  label: Text(
+                    'LOGOUT',
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    minimumSize: WidgetStateProperty.all(const Size(110, 40)),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                    ),
+                    side: WidgetStatePropertyAll(
+                      BorderSide(color: colors.error),
+                    ),
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      return states.contains(WidgetState.hovered)
+                          ? colors.error
+                          : colors.surface;
+                    }),
+                    foregroundColor: WidgetStateProperty.resolveWith((states) {
+                      return states.contains(WidgetState.hovered)
+                          ? colors.onPrimary
+                          : colors.error;
+                    }),
+                  ),
+                ),
               ],
             ),
           ),
@@ -222,159 +188,198 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPostScrollable(BuildContext context) {
+  Widget _buildSearchProfile(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Material(
-      color: colors.surface,
-      shape: BeveledRectangleBorder(side: BorderSide(color: colors.outline)),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'POST FEED',
-              style: GoogleFonts.jetBrainsMono(
-                color: colors.primary,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _placeholderPosts.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                return _buildPostContainer(context, _placeholderPosts[index]);
-              },
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Material(
+        color: colors.surface,
+        shape: BeveledRectangleBorder(
+          side: BorderSide(color: colors.outline),
+          borderRadius: const BorderRadius.only(
+            bottomRight: Radius.circular(36),
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildPostContainer(BuildContext context, _PlaceholderPost post) {
-    final colors = Theme.of(context).colorScheme;
-
-    return Material(
-      shape: BeveledRectangleBorder(
-        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(10)),
-        side: BorderSide(color: colors.outline),
-      ),
-
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+        child: SizedBox(
+          height: 500,
+          width: 500,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  backgroundColor: colors.primaryContainer,
-                  foregroundColor: colors.onPrimaryContainer,
-                  child: Text(post.author.substring(0, 1).toUpperCase()),
+                Text(
+                  'DISCOVER',
+                  style: GoogleFonts.jetBrainsMono(
+                    color: colors.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    '@${post.author}',
-                    style: GoogleFonts.jetBrainsMono(
-                      color: colors.primary,
-                      fontWeight: FontWeight.bold,
+                const SizedBox(height: 14),
+                TextField(
+                  cursorColor: colors.primary,
+                  style: GoogleFonts.jetBrainsMono(color: colors.onSurface),
+                  decoration: InputDecoration(
+                    hintText: 'Search users',
+                    hintStyle: GoogleFonts.jetBrainsMono(
+                      color: colors.onSurfaceVariant,
+                      fontSize: 12,
+                    ),
+                    prefixIcon: Icon(Icons.search, color: colors.primary),
+                    filled: true,
+                    fillColor: colors.surfaceContainer,
+                    isDense: true,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: colors.outline),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: colors.primary, width: 2),
                     ),
                   ),
                 ),
+                const SizedBox(height: 18),
                 Text(
-                  'NOW',
+                  'SUGGESTED USERS',
                   style: GoogleFonts.jetBrainsMono(
                     color: colors.onSurfaceVariant,
                     fontSize: 10,
+                    letterSpacing: 1,
                   ),
                 ),
+                const SizedBox(height: 10),
+                _buildSuggestedProfile(context, 'pixel_runner', '12 posts'),
+                const SizedBox(height: 10),
+                _buildSuggestedProfile(context, 'cyber_ghost', '8 posts'),
               ],
             ),
-            const SizedBox(height: 14),
-            Text(
-              post.title,
-              style: GoogleFonts.jetBrainsMono(
-                color: colors.onSurface,
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              post.content,
-              style: TextStyle(color: colors.onSurface, height: 1.4),
-            ),
-            if (post.imageCount > 0) ...[
-              const SizedBox(height: 14),
-              Container(
-                height: 150,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  border: Border.all(color: colors.outlineVariant),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.image_outlined, color: colors.secondary),
-                      const SizedBox(height: 6),
-                      Text(
-                        '${post.imageCount} image placeholder${post.imageCount > 1 ? 's' : ''}',
-                        style: GoogleFonts.jetBrainsMono(
-                          color: colors.onSurfaceVariant,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Icon(Icons.favorite_border, color: colors.onSurfaceVariant),
-                const SizedBox(width: 16),
-                Icon(Icons.chat_bubble_outline, color: colors.onSurfaceVariant),
-                const SizedBox(width: 16),
-                Icon(Icons.share_outlined, color: colors.onSurfaceVariant),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildSearchProfile(BuildContext context){
-    return Placeholder();
+  Widget _buildSuggestedProfile(
+    BuildContext context,
+    String username,
+    String postCount,
+  ) {
+    final colors = Theme.of(context).colorScheme;
 
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 16,
+          backgroundColor: colors.secondaryContainer,
+          foregroundColor: colors.onSecondaryContainer,
+          child: Text(username.substring(0, 1).toUpperCase()),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '@$username',
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.jetBrainsMono(
+                  color: colors.onSurface,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                postCount,
+                style: GoogleFonts.jetBrainsMono(
+                  color: colors.onSurfaceVariant,
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Icon(Icons.add, color: colors.primary, size: 18),
+      ],
+    );
   }
+
+  Widget _buildLogoutConfimation(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Dialog(
+      backgroundColor: colors.surface,
+      shape: BeveledRectangleBorder(
+        side: BorderSide(color: colors.error),
+        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(36)),
+      ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 360),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.logout, color: colors.error, size: 32),
+              const SizedBox(height: 16),
+              Text(
+                'LOG OUT?',
+                style: GoogleFonts.jetBrainsMono(
+                  color: colors.error,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Your current session will end on this device.',
+                style: TextStyle(color: colors.onSurfaceVariant, height: 1.4),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      'CANCEL',
+                      style: GoogleFonts.jetBrainsMono(
+                        color: colors.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  FilledButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                      await logout();
+                    },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: colors.error,
+                      foregroundColor: colors.onError,
+                      shape: const BeveledRectangleBorder(),
+                    ),
+                    child: Text(
+                      'LOG OUT',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }
-
-class _PlaceholderPost {
-  const _PlaceholderPost({
-    required this.author,
-    required this.title,
-    required this.content,
-    required this.imageCount,
-  });
-
-  final String author;
-  final String title;
-  final String content;
-  final int imageCount;
-}
-
-
-
 
