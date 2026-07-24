@@ -1,3 +1,4 @@
+﻿import 'post_images_models.dart';
 import 'profile_models.dart';
 
 class PostModel {
@@ -8,6 +9,7 @@ class PostModel {
   final DateTime createdAt;
   final DateTime updatedAt;
   final ProfileModel? author;
+  final List<PostImageModel> images;
 
   PostModel({
     required this.postId,
@@ -17,6 +19,7 @@ class PostModel {
     required this.createdAt,
     required this.updatedAt,
     this.author,
+    this.images = const [],
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
@@ -29,7 +32,24 @@ class PostModel {
     author: json['profiles'] != null
         ? ProfileModel.fromJson(json['profiles'] as Map<String, dynamic>)
         : null,
+    images: ((json['post_images'] as List<dynamic>?) ?? const [])
+      .map((image) => PostImageModel.fromJson(image as Map<String, dynamic>))
+      .toList()
+      ..sort((left, right) => left.displayOrder.compareTo(right.displayOrder)),
   );
+
+  PostModel copyWith({ProfileModel? author}) {
+    return PostModel(
+      postId: postId,
+      authorId: authorId,
+      title: title,
+      content: content,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      author: author ?? this.author,
+      images: images,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'post_id': postId,

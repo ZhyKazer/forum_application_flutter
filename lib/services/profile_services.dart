@@ -1,4 +1,4 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+﻿import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/profile_models.dart';
 
 class ProfileService {
@@ -43,26 +43,18 @@ class ProfileService {
     if (user == null) {
       throw Exception('No authenticated user.');
     }
-
-    final updates = <String, dynamic>{
-      'updated_at': DateTime.now().toIso8601String(),
-    };
-
-    if (username != null) {
-      updates['username'] = username;
+    if (username == null || username.trim().isEmpty) {
+      throw ArgumentError.value(username, 'username', 'A username is required.');
     }
 
-    if (avatarPath != null) {
-      updates['avatar_path'] = avatarPath;
-    }
+    final data = await _supabase.rpc(
+      'upsert_my_profile',
+      params: {
+        'profile_username': username.trim(),
+        'profile_avatar_path': avatarPath,
+      },
+    );
 
-    final data = await _supabase
-        .from('profiles')
-        .update(updates)
-        .eq('user_id', user.id)
-        .select()
-        .single();
-
-    return ProfileModel.fromJson(data);
+    return ProfileModel.fromJson(data as Map<String, dynamic>);
   }
 }

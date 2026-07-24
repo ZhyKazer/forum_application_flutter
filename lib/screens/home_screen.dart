@@ -1,11 +1,28 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:forum_application_flutter/models/profile_models.dart';
+import 'package:forum_application_flutter/screens/profile_screen.dart';
 import 'package:forum_application_flutter/services/authentication_services.dart';
+import 'package:forum_application_flutter/services/profile_services.dart';
 import 'package:forum_application_flutter/utils/grid_background.dart';
 import 'package:forum_application_flutter/widgets/post_builder_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final ProfileService _profileService = ProfileService();
+  late final Future<ProfileModel?> _profileFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _profileFuture = _profileService.getMyProfile();
+  }
 
   Future<void> logout() async {
     await AuthenticationService().logout();
@@ -56,6 +73,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildProfile(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
@@ -86,19 +104,37 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 18),
-                CircleAvatar(
-                  radius: 34,
-                  backgroundColor: colors.primaryContainer,
-                  foregroundColor: colors.onPrimaryContainer,
-                  child: const Icon(Icons.person, size: 38),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  '@neon_kazer',
-                  style: GoogleFonts.jetBrainsMono(
-                    color: colors.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
+                FutureBuilder<ProfileModel?>(
+                  future: _profileFuture,
+                  builder: (context, snapshot) {
+                    final metadataUsername = AuthenticationService()
+                        .currentUser
+                        ?.userMetadata?['username'] as String?;
+                    final username =
+                        snapshot.data?.username ?? metadataUsername ?? 'unknown_user';
+
+                    return Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 34,
+                          backgroundColor: colors.primaryContainer,
+                          foregroundColor: colors.onPrimaryContainer,
+                          child: Text(
+                            username.substring(0, 1).toUpperCase(),
+                            style: const TextStyle(fontSize: 26),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          '@$username',
+                          style: GoogleFonts.jetBrainsMono(
+                            color: colors.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 6),
                 Row(
@@ -118,7 +154,13 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 18),
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const ProfileScreen(),
+                      ),
+                    );
+                  },
                   label: Text(
                     'PROFILE',
                     style: GoogleFonts.jetBrainsMono(
@@ -150,7 +192,10 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 OutlinedButton.icon(
                   onPressed: () async {
-                    await logout();
+                    showDialog<void>(
+                      context: context,
+                      builder: _buildLogoutConfimation,
+                    );
                   },
                   label: Text(
                     'LOGOUT',
@@ -380,6 +425,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
 }
-

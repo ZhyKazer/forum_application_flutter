@@ -1,4 +1,4 @@
-name: forum_application_flutter
+﻿name: forum_application_flutter
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
@@ -12,6 +12,9 @@ dependencies:
 
   provider: ^6.1.5+1
   go_router: ^17.3.0
+  cross_file: ^0.3.5+1
+  desktop_drop: ^0.7.1
+  file_picker: ^11.0.2
   image_picker_gallery_camera: ^0.3.0
 
   # Supabase
@@ -31,3 +34,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/data/username_combinations.json

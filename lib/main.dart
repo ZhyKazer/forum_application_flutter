@@ -1,7 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:forum_application_flutter/screens/home_screen.dart';
 import 'package:forum_application_flutter/screens/login_screen.dart';
-import 'package:forum_application_flutter/screens/profile_page.dart';
 import 'package:forum_application_flutter/utils/app_color.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
